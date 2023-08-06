@@ -1,8 +1,0 @@
-tf.math.segment_mean
-tf.math.log1p
-tf.experimental.numpy.std
-tf.compat.v1.roll
-tf.mixed_precision.experimental.DynamicLossScale
-tf.experimental.numpy.allclose
-tf.math.conj
-tf.compat.v1.keras.metrics.CategoricalCrossentropy

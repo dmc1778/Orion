@@ -194,15 +194,13 @@ def run_fuzzer(args):
             write_list_to_txt4(api_, f'{tool}_{library}_{release}_executed_apis.txt')
             flag = True
             # flag = search_in_dataset(api_, library)
-            if flag:
-                
-                print(
-                    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-                print(f"API {api_}::{i}/{len(data)}")
-                print(
-                    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-                
+            if flag:        
                 for component in components:
+                    print(
+                        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                    print(f"Running API {api_}::{i}/{len(data)} ON {component}")
+                    print(
+                        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                     if 'tensorflow.python' in api_:
                         prerun_flag = pre_run_check(api_)
                     else:

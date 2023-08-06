@@ -159,23 +159,23 @@ def count_tensor_inputs(api, lib="Tensorflow"):
     return tensor_holder
 
 if __name__ == "__main__":
-    # library = sys.argv[1]
-    # api_name = sys.argv[2]
-    # index = sys.argv[3]
-    # tool_name = sys.argv[4]
-    # dbname = sys.argv[5]
-    # output_dir = sys.argv[6]
-    # component = sys.argv[7]
+    library = sys.argv[1]
+    api_name = sys.argv[2]
+    index = sys.argv[3]
+    tool_name = sys.argv[4]
+    dbname = sys.argv[5]
+    output_dir = sys.argv[6]
+    component = sys.argv[7]
     
 
-    library = "torch"
-    api_name = "torch.nextafter"
-    index = 1
-    tool_name = "orion"
-    dbname = 'deeprel-torch'
-    release = "1.12.0"
-    output_dir = f"/media/nimashiri/SSD/testing_results/{tool_name}/{library}/{release}"
-    component = "component3"
+    # library = "tf"
+    # api_name = "tf.argsort"
+    # index = 1
+    # tool_name = "orion"
+    # dbname = 'freefuzz-tf'
+    # release = "2.11.0"
+    # output_dir = f"/media/nimashiri/SSD/testing_results/{tool_name}/{library}/{release}"
+    # component = "component3"
     
 
     # output_dir = "/media/nimashiri/SSD/testing_results"

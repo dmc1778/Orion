@@ -118,7 +118,31 @@ class TorchArgument(Argument):
                 dtype = self.low_precision_dtype(dtype)
                 max_value, min_value = self.random_tensor_value(dtype)
             suffix = ""
-            big_number = random.randint(187, 16106)
+            values = [2**8, 
+                            2**22, 
+                            2**24, 
+                            1012756988, 
+                            498444555, 
+                            545646544, 
+                            536870912, 
+                            36028797018963968, 
+                            1250999896764, 
+                            10 ** 6,
+                            2**60-1,
+                            1676240524292489355,
+                            100000000,
+                            1610637938,
+                            1e38,
+                            1e20,
+                            65534,
+                            8968073515812833920,
+                            2 ** 31,
+                            92233720368,
+                            1610612736,
+                            3046875451,
+                            1048576,
+                            2147483647]
+            big_number = random.choice(values)
             if is_cuda:
                 suffix = ".cuda()"
             if dtype.is_floating_point:
@@ -145,8 +169,8 @@ class TorchArgument(Argument):
                     num_steps = 5
                     code = f"{var_name}_tensor = torch.linspace({start},{end},{num_steps})\n"
                 elif self.non_scalar_input_flag4:
-                    min_val = random.randint(0, 163)
-                    max_val = random.randint(0, 163)
+                    min_val = random.randint(0, 1024)
+                    max_val = random.randint(0, 1024)
                     code = f"{var_name}_tensor = torch.zeros(({min_val},{max_val}))\n"
                 elif self.non_scalar_input_flag4:
                     start = 0
@@ -156,31 +180,31 @@ class TorchArgument(Argument):
                     
                 ### large
                 elif self.large_tensor_flag1:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.randint({min_val},{max_val},{self.shape}, dtype={dtype})\n"
                 elif self.large_tensor_flag2:
                     code = f"{var_name}_tensor = torch.tensor([{big_number}], dtype={dtype})\n"
                 elif self.large_tensor_flag3:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.ones(({min_val}, {max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag4:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = random.randint(0, 1024)
                     code = f"{var_name}_tensor = torch.rand(({min_val},{max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag5:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.randn(({min_val},{max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag6:
-                    min_val = random.randint(0, 1000)
-                    max_val = random.randint(0, 1000)
-                    random_indx = random.randint(10,100)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
+                    random_indx = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.full(({min_val},{max_val}),random_indx, dtype={dtype})\n"
                 elif self.large_tensor_flag7:
-                    min_val = random.randint(0, 1000)
-                    max_val = random.randint(0, 1000)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.arrange({min_val},{max_val}, dtype={dtype})\n"
                 elif self.large_tensor_flag8:
                     code = f"{var_name}_tensor = torch.linspace(0,1, 1000000, dtype={dtype})\n"
@@ -193,8 +217,8 @@ class TorchArgument(Argument):
                 elif self.tensor_empty_flag_type3:
                     code = f"{var_name}_tensor = torch.ones((0,0))\n"
                 elif self.tensor_empty_flag_type4:
-                    min_val = random.randint(0, 1000)
-                    max_val = random.randint(0, 1000)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.zeros(({min_val},{max_val}))\n"
                 elif self.tensor_empty_flag_type5:
                     code = f"{var_name}_tensor = torch.tensor([])\n"
@@ -207,11 +231,11 @@ class TorchArgument(Argument):
                 elif self.tensor_zero_flag_type1:
                     code = f"{var_name}_tensor = torch.zeros({self.shape}, dtype={dtype})\n"
                 elif self.tensor_zero_flag_type2:
-                    val1 = random.randint(100, 1000)
-                    val2 = random.randint(100, 1000)
-                    val3 = random.randint(100, 1000)
-                    val4 = random.randint(100, 1000)
-                    val5 = random.randint(100, 1000)
+                    val1 = 2**random.randint(5, 10)
+                    val2 = 2**random.randint(5, 10)
+                    val3 = 2**random.randint(5, 10)
+                    val4 = 2**random.randint(5, 10)
+                    val5 = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.zeros([{val1}, {val2}, {val3}, {val4}, {val5}], dtype={dtype})\n"
                 elif self.nan_input_tensor:
                     code = f"{var_name}_tensor = torch.tensor({self.shape}, dtype={dtype})\n"
@@ -219,7 +243,7 @@ class TorchArgument(Argument):
                 elif self.nan_input_tensor_whole:
                     code = f"{var_name}_tensor = np.nan \n"
                 elif self.scalar_input_flag:
-                    x = random.randint(187, 1610)
+                    x = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = {x} \n"
                 else:
                     code = (
@@ -249,8 +273,8 @@ class TorchArgument(Argument):
                     num_steps = 5
                     code = f"{var_name}_tensor = torch.linspace({start},{end},{num_steps}, dtype=torch.complex128)\n"
                 elif self.non_scalar_input_flag4:
-                    min_val = random.randint(0, 163)
-                    max_val = random.randint(0, 163)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.zeros(({min_val},{max_val}), dtype=torch.complex128)\n"
                 elif self.non_scalar_input_flag4:
                     start = 0
@@ -260,31 +284,31 @@ class TorchArgument(Argument):
                     
                 ### large
                 elif self.large_tensor_flag1:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.randint({min_val},{max_val},{self.shape}, dtype={dtype})\n"
                 elif self.large_tensor_flag2:
                     code = f"{var_name}_tensor = torch.tensor([{big_number}], dtype={dtype})\n"
                 elif self.large_tensor_flag3:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.ones(({min_val}, {max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag4:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.rand(({min_val},{max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag5:
-                    min_val = random.randint(0, 1610)
-                    max_val = random.randint(0, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.randn(({min_val},{max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag6:
-                    min_val = random.randint(0, 1000)
-                    max_val = random.randint(0, 1000)
-                    random_indx = random.randint(10,100)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
+                    random_indx = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.full(({min_val},{max_val}),random_indx, dtype={dtype})\n"
                 elif self.large_tensor_flag7:
-                    min_val = random.randint(0, 1000000)
-                    max_val = random.randint(0, 1000000)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.arrange({min_val},{max_val}, dtype={dtype})\n"
                 elif self.large_tensor_flag2:
                     code = f"{var_name}_tensor = torch.linspace(0,1, 1000000, dtype={dtype})\n"
@@ -296,8 +320,8 @@ class TorchArgument(Argument):
                 elif self.tensor_empty_flag_type3:
                     code = f"{var_name}_tensor = torch.ones((0,0))\n"
                 elif self.tensor_empty_flag_type4:
-                    min_val = random.randint(0, 1000000)
-                    max_val = random.randint(0, 1000000)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.zeros(({min_val},{max_val}))\n"
                 elif self.tensor_empty_flag_type5:
                     code = f"{var_name}_tensor = torch.tensor([])\n"
@@ -313,11 +337,11 @@ class TorchArgument(Argument):
                 elif self.tensor_zero_flag_type1:
                     code = f"{var_name}_tensor = torch.zeros({self.shape}, dtype={dtype})\n"
                 elif self.tensor_zero_flag_type2:
-                    val1 = random.randint(100, 1000)
-                    val2 = random.randint(100, 1000)
-                    val3 = random.randint(100, 1000)
-                    val4 = random.randint(100, 1000)
-                    val5 = random.randint(100, 1000)
+                    val1 = 2**random.randint(5, 10)
+                    val2 = 2**random.randint(5, 10)
+                    val3 = 2**random.randint(5, 10)
+                    val4 = 2**random.randint(5, 10)
+                    val5 = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.zeros([{val1}, {val2}, {val3}, {val4}, {val5}], dtype={dtype})\n"
                 elif self.nan_input_tensor:
                     code = f"{var_name}_tensor = torch.tensor({self.shape}, dtype={dtype})\n"
@@ -325,7 +349,7 @@ class TorchArgument(Argument):
                 elif self.nan_input_tensor_whole:
                     code = f"{var_name}_tensor = np.nan \n"
                 elif self.scalar_input_flag:
-                    x = random.randint(187, 1610)
+                    x = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = {x} \n"
                 else:
                     code = (
@@ -334,27 +358,27 @@ class TorchArgument(Argument):
             elif dtype == torch.bool:
                 
                 if self.large_tensor_flag1:
-                    big_val = random.randint(161, 1000)
+                    big_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.full((1, 1, 1, 1, 1,), {big_val}, dtype={dtype})\n"
                 elif self.large_tensor_flag2:
-                    min_val = random.randint(187, 1610)
-                    max_val = random.randint(187, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.randint({min_val},{max_val},{self.shape}, dtype={dtype})\n"
                 elif self.large_tensor_flag3:
-                    min_val = random.randint(187, 1610)
-                    max_val = random.randint(187, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.ones(({min_val},{max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag4:
-                    min_val = random.randint(187, 1610)
-                    max_val = random.randint(187, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.empty(({min_val},{max_val}), dtype={dtype})\n"
                 elif self.large_tensor_flag5:
-                    min_val = random.randint(187, 1610)
-                    max_val = random.randint(187, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.full(({min_val},{max_val}),True, dtype={dtype})\n"
                 elif self.large_tensor_flag6:
-                    min_val = random.randint(187, 1610)
-                    max_val = random.randint(187, 1610)
+                    min_val = 2**random.randint(5, 10)
+                    max_val = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.eye({min_val}, dtype={dtype})\n"
     
                 elif self.tensor_empty_flag_type1:
@@ -375,11 +399,11 @@ class TorchArgument(Argument):
                 elif self.tensor_zero_flag_type1:
                     code = f"{var_name}_tensor = torch.zeros({self.shape}, dtype={dtype})\n"
                 elif self.tensor_zero_flag_type2:
-                    val1 = random.randint(100, 1000)
-                    val2 = random.randint(100, 1000)
-                    val3 = random.randint(100, 1000)
-                    val4 = random.randint(100, 1000)
-                    val5 = random.randint(100, 1000)
+                    val1 = 2**random.randint(5, 10)
+                    val2 = 2**random.randint(5, 10)
+                    val3 = 2**random.randint(5, 10)
+                    val4 = 2**random.randint(5, 10)
+                    val5 = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = torch.zeros([{val1}, {val2}, {val3}, {val4}, {val5}], dtype={dtype})\n"
                 elif self.nan_input_tensor:
                     code = f"{var_name}_tensor = torch.tensor({self.shape}, dtype={dtype})\n"
@@ -387,7 +411,7 @@ class TorchArgument(Argument):
                 elif self.nan_input_tensor_whole:
                     code = f"{var_name}_tensor = np.nan \n"
                 elif self.scalar_input_flag:
-                    x = random.randint(1879048192, 161063793887434)
+                    x = 2**random.randint(5, 10)
                     code = f"{var_name}_tensor = {x} \n"
                 else:
                     code = f"{var_name}_tensor = torch.randint(0,2,{self.shape}, dtype={dtype})\n"
@@ -1045,7 +1069,7 @@ class TorchArgument(Argument):
                 999999999.9999999,
                 1.7976931348623157e+308,
                 2.2250738585072014e308]
-            new_value = random.choice(negs)
+            new_value = random.choice(values)
             self.value = -new_value
         elif nan:
             self.value = float('nan')
@@ -1061,10 +1085,11 @@ class TorchArgument(Argument):
     def mutate_str(self, invalid=False, empty1=False, nan=False, none=False, empty2=False) -> str:
         if invalid:
             non_ascii_list = [chr(i) for i in range(128, 256)]
-            def generate_random_word(length):
-                return ''.join(random.choice(non_ascii_list) for _ in range(length))
-            random_words = [generate_random_word(random.randint(5, 10)) for _ in range(5)]
-            self.value = random.choice(random_words)
+            # def generate_random_word(length):
+            #     return ''.join(random.choice(non_ascii_list) for _ in range(length))
+            # random_words = [generate_random_word(random.randint(5, 10)) for _ in range(5)]
+            # value = random.choice(random_words)
+            self.value = "(0)"
         if nan:
             self.value = float('nan')
         elif none:
@@ -1072,7 +1097,7 @@ class TorchArgument(Argument):
         elif empty1:
             self.value = []
         elif empty2:
-            self.value = " "
+            self.value = "(0)"
 
  
     def modify_tensor_rank(self, large=False, neg=False, zero=False, empty=False, neg_large=False):

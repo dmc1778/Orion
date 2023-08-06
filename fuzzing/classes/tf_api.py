@@ -1284,19 +1284,41 @@ class TFArgument(Argument):
             assert 0
         code = ""
         var_tensor_name = f"{var_name}_tensor"
-
-        big_number = random.randint(1879048192, 161063793887434)
-        small_value_list = random.randint(1, 1000)
+        values = [2**8, 
+                        2**22, 
+                        2**24, 
+                        1012756988, 
+                        498444555, 
+                        545646544, 
+                        536870912, 
+                        36028797018963968, 
+                        1250999896764, 
+                        10 ** 6,
+                        2**60-1,
+                        1676240524292489355,
+                        100000000,
+                        1610637938,
+                        1e38,
+                        1e20,
+                        65534,
+                        8968073515812833920,
+                        2 ** 31,
+                        92233720368,
+                        1610612736,
+                        3046875451,
+                        1048576,
+                        2147483647]
+        big_number = random.choice(values)
 
         if dtype.is_floating:
             ### neg
             if self.make_tensor_neg1:
-                big_number = random.randint(1879048192, 161063793887434)
+                big_number = random.choice(values)
                 value = -big_number
                 code += f"{var_tensor_name} = tf.constant({value}, shape={shape}, dtype=tf.{dtype.name},)\n"
 
             elif self.make_tensor_neg2:
-                big_number = random.randint(100, 1000)
+                big_number = random.choice(values)
                 value = -big_number
                 code += f"{var_tensor_name} = tf.constant({value}, shape={shape}, dtype=tf.{dtype.name},)\n"
                 
@@ -1340,7 +1362,7 @@ class TFArgument(Argument):
             
             # SCALAR
             elif self.scalar_input_flag:
-                big_number = random.randint(1, 1000)
+                big_number = random.choice(values)
                 code += f"{var_tensor_name} = {big_number} \n"
                 
             # NAN
@@ -1372,11 +1394,10 @@ class TFArgument(Argument):
         elif dtype.is_complex:
             if self.make_tensor_neg1:
                 ftype = "float64" if dtype == tf.complex128 else "float32"
-                value1 = random.randint(1879048192, 161063793887434)
-                value2 = random.randint(1879048192, 161063793887434)
+                value1 = random.choice(values)
+                value2 = random.choice(values)
                 code += f"{var_tensor_name} = tf.complex(tf.constant({-value1}, shape={shape}, dtype=tf.{ftype}), tf.constant({-value2}, shape={shape}, dtype=tf.{ftype}))\n"
                 
-
             elif self.make_tensor_neg2:
                 ftype = "float64" if dtype == tf.complex128 else "float32"
                 value1 = random.randint(18, 161)
@@ -1387,8 +1408,8 @@ class TFArgument(Argument):
                 
             
             elif self.scalar_input_flag:
-                value = random.randint(1, 1000)
-                code += f"{var_tensor_name} = {value} \n"
+                big_number = random.choice(values)
+                code += f"{var_tensor_name} = {big_number} \n"
                 
             # Empty
             elif self.tensor_empty_flag_type1:
@@ -1458,8 +1479,8 @@ class TFArgument(Argument):
                 
             elif self.large_tensor_flag_type1:
                 ftype = "float64" if dtype == tf.complex128 else "float32"
-                value1 = random.randint(1879048192, 161063793887434)
-                value2 = random.randint(1879048192, 161063793887434)
+                value1 = random.choice(values)
+                value2 = random.choice(values)
                 code += (
                     "%s =tf.complex(tf.random.uniform(%s, dtype=tf.%s, maxval=%s),"
                     "tf.random.uniform(%s, dtype=tf.%s, maxval=%s))\n"
@@ -1475,8 +1496,8 @@ class TFArgument(Argument):
                 )
             elif self.large_tensor_flag_type2:
                 ftype = "float64" if dtype == tf.complex128 else "float32"
-                value1 = random.randint(1879048192, 161063793887434)
-                value2 = random.randint(1879048192, 161063793887434)
+                value1 = random.choice(values)
+                value2 = random.choice(values)
                 code += (
                     "%s = tf.complex(tf.constant(%s, shape=%s, dtype=tf.%s,),"
                     "tf.constant(%s, shape=%s, dtype=tf.%s,))\n"
@@ -1509,8 +1530,8 @@ class TFArgument(Argument):
 
             ### large
             elif self.large_tensor_flag_type1:
-                d1 = random.randint(1, 1000)
-                d2 = random.randint(1, 1000)
+                d1 = random.choice(values)
+                d2 = random.choice(values)
                 val = random.choice([True, False])
                 code += f"{var_tensor_name} = tf.constant({val}, shape=[{d1},{d2}])\n"   
             
@@ -1662,7 +1683,7 @@ class TFArgument(Argument):
                 code += f"{var_tensor_name} = tf.constant([-1.5, -2.5], shape=[2, 1], dtype=tf.{dtype.name},)\n"
                 
             elif self.scalar_input_flag:
-                value = random.randint(1879048192, 161063793887434)
+                value = random.choice(values)
                 code += f"{var_tensor_name} = {value} \n"
             elif self.nan_input_tensor:
                 code += "%s = tf.constant(float('nan'), shape=%s, dtype=tf.float64)\n" % (
@@ -1702,7 +1723,7 @@ class TFArgument(Argument):
                 )
         else:
             if self.make_tensor_neg1:
-                value = random.randint(1879048192, 161063793887434)
+                value = random.choice(values)
                 code += (
                     "%s = tf.saturate_cast("
                     "tf.constant(%s, shape=%s, dtype=tf.int64,),"
@@ -1812,7 +1833,7 @@ class TFArgument(Argument):
             elif self.tensor_empty_flag_type2:
                 code += "%s = [] \n" % (var_tensor_name)
             elif self.large_tensor_flag_type1:
-                value = random.randint(1879048192, 161063793887434)
+                value = random.choice(values)
                 code += (
                     "%s = tf.saturate_cast("
                     "tf.random.uniform(%s, dtype=tf.int64, maxval=%s),"
@@ -1820,7 +1841,7 @@ class TFArgument(Argument):
                         var_tensor_name, shape, abs(value), dtype.name)
                 )
             elif self.large_tensor_flag_type2:
-                value = random.randint(1879048192, 161063793887434)
+                value = random.choice(values)
                 code += (
                     "%s = tf.saturate_cast("
                     "tf.constant(%s, shape=%s, dtype=tf.int64,),"
@@ -2260,7 +2281,7 @@ class TFArgument(Argument):
         else:
             return
         
-        def mutate_integer(self, zero=False, large=False, neg=False, neg_large=False, nan=False, none=False, empty=False) -> int:
+    def mutate_integer(self, zero=False, large=False, neg=False, neg_large=False, nan=False, none=False, empty=False) -> int:
             if zero:
                 self.value = 0.0
             elif large:
@@ -2399,7 +2420,7 @@ class TFArgument(Argument):
                 999999999.9999999,
                 1.7976931348623157e+308,
                 2.2250738585072014e308]
-            new_value = random.choice(negs)
+            new_value = random.choice(values)
             self.value = -new_value
         elif nan:
             self.value = float('nan')
@@ -2415,10 +2436,11 @@ class TFArgument(Argument):
     def mutate_str(self, invalid=False, empty1=False, nan=False, none=False, empty2=False) -> str:
         if invalid:
             non_ascii_list = [chr(i) for i in range(128, 256)]
-            def generate_random_word(length):
-                return ''.join(random.choice(non_ascii_list) for _ in range(length))
-            random_words = [generate_random_word(random.randint(5, 10)) for _ in range(5)]
-            self.value = random.choice(random_words)
+            # def generate_random_word(length):
+            #     return ''.join(random.choice(non_ascii_list) for _ in range(length))
+            # random_words = [generate_random_word(random.randint(5, 10)) for _ in range(5)]
+            # value = random.choice(random_words)
+            self.value = "(0)"
         if nan:
             self.value = float('nan')
         elif none:
@@ -2426,7 +2448,7 @@ class TFArgument(Argument):
         elif empty1:
             self.value = []
         elif empty2:
-            self.value = " "
+            self.value = "(0)"
 
     def modify_tensor_rank(self, large=False, neg=False, zero=False, empty=False, neg_large=False):
         if large:

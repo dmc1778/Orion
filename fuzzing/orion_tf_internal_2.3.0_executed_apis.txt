@@ -1,0 +1,5 @@
+tensorflow.python.ops.logging_ops._generate_placeholder_string
+tensorflow.python.data.experimental.ops.distribute.batch_sizes_for_worker
+tensorflow.python.util.decorator_utils.validate_callable
+tensorflow.python.autograph.pyct.common_transformers.anf._is_trivial
+tensorflow.python.data.experimental.ops.shuffle_ops.shuffle_and_repeat
