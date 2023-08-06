@@ -165,9 +165,6 @@ def run_fuzzer(args):
     tool = args.tool
     round_exp = args.experiment_round
     config_name = args.config_dir
-    component1 = args.component1
-    component2 = args.component2
-    component3 = args.component3
 
     tf_output_dir = f"/media/nimashiri/SSD/testing_results/{tool}/{library}/{release}"
 
@@ -190,7 +187,7 @@ def run_fuzzer(args):
         f1 = open(hisotry_file, 'a')
 
     hist = read_txt(f'{tool}_{library}_{release}_executed_apis.txt')
-
+    components = ['component1', 'component2', 'component3']
     for i, api_ in enumerate(data):
         if api_ not in hist:
             #api_ = "tensorflow.python.eager.lift_to_graph.lift_to_graph"
@@ -205,98 +202,97 @@ def run_fuzzer(args):
                 print(
                     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                 
-                if 'tensorflow.python' in api_:
-                    prerun_flag = pre_run_check(api_)
-                else:
-                    prerun_flag = False
-                if prerun_flag == False:
-                    # skip_flag = find_skip_list(api_)
-                    if "__main__" not in api_:
-                        try:
-                            if tool == "orion":
-                                res = subprocess.run(
-                                    [
-                                        "python3",
-                                        "/media/nimashiri/SSD/FSE23_2/fuzzing/orion_main.py",
-                                        library,
-                                        api_,
-                                        str(i),
-                                        tool,
-                                        dbname,
-                                        tf_output_dir,
-                                        component1,
-                                        component2,
-                                        component3,
-                                    ],
-                                    capture_output=True,
-                                    text=True,
-                                    shell=False,
-                                    timeout=100,
-                                )
-                            elif tool == "FreeFuzz":
-                                res = subprocess.run(
-                                    [
-                                        "python3",
-                                        "/media/nimashiri/SSD/FSE23_2/fuzzing/freefuzz_api_main.py",
-                                        config_name,
-                                        library,
-                                        api_,
-                                        str(i),
-                                        tool,
-                                    ],
-                                    shell=False,
-                                    timeout=100,
+                for component in components:
+                    if 'tensorflow.python' in api_:
+                        prerun_flag = pre_run_check(api_)
+                    else:
+                        prerun_flag = False
+                    if prerun_flag == False:
+                        # skip_flag = find_skip_list(api_)
+                        if "__main__" not in api_:
+                            try:
+                                if tool == "orion":
+                                    res = subprocess.run(
+                                        [
+                                            "python3",
+                                            "/media/nimashiri/SSD/FSE23_2/fuzzing/orion_main.py",
+                                            library,
+                                            api_,
+                                            str(i),
+                                            tool,
+                                            dbname,
+                                            tf_output_dir,
+                                            component,
+                                        ],
+                                        capture_output=True,
+                                        text=True,
+                                        shell=False,
+                                        timeout=100,
+                                    )
+                                elif tool == "FreeFuzz":
+                                    res = subprocess.run(
+                                        [
+                                            "python3",
+                                            "/media/nimashiri/SSD/FSE23_2/fuzzing/freefuzz_api_main.py",
+                                            config_name,
+                                            library,
+                                            api_,
+                                            str(i),
+                                            tool,
+                                        ],
+                                        shell=False,
+                                        timeout=100,
+                                    )
+                                else:
+                                    print("No tool provided")
+                            except subprocess.TimeoutExpired:
+                                dump_data(f"{api_}\n", join(
+                                    tf_output_dir, "timeout.txt"), "a")
+                            except Exception as e:
+                                dump_data(
+                                    f"{api_}\n  {e}\n", join(
+                                        tf_output_dir, "runerror.txt"), "a"
                                 )
                             else:
-                                print("No tool provided")
-                        except subprocess.TimeoutExpired:
-                            dump_data(f"{api_}\n", join(
-                                tf_output_dir, "timeout.txt"), "a")
-                        except Exception as e:
-                            dump_data(
-                                f"{api_}\n  {e}\n", join(
-                                    tf_output_dir, "runerror.txt"), "a"
-                            )
-                        else:
-                            if res.returncode != 0:
-                                if "AttributeError: module" not in res.stderr and "NameError:" not in res.stderr:
-                                    print(f"{Fore.RED} I found a potential bug: {res.stderr}{Style.RESET_ALL}")
-                                    if round_exp == 1:
-                                        dump_data(f"{api_}\n", join(
-                                            tf_output_dir, "runcrash.txt"), "a")
+                                if res.returncode != 0:
+                                    if "AttributeError: module" not in res.stderr and "NameError:" not in res.stderr:
+                                        print(f"{Fore.RED} I found a potential bug: {res.stderr}{Style.RESET_ALL}")
+                                        if round_exp == 1:
+                                            dump_data(f"{api_}\n", join(
+                                                tf_output_dir, "runcrash.txt"), "a")
+                                        else:
+                                            dump_data(f"{api_}\n", join(
+                                                tf_output_dir, "runcrashround2.txt"), "a")
+
+                                        buggy_path = f"{tf_output_dir}/{tool}_bugs"
+
+                                        if not os.path.exists(buggy_path):
+                                            os.makedirs(buggy_path, exist_ok=True)
+
+                                        command_ = f"cp -r {tf_output_dir}/temp.py {buggy_path}/{api_}.py"
+                                        
+                                        command_2 = f"cp -r {tf_output_dir}/rule_temp.txt {buggy_path}/{api_}_output.txt"
+                                    
+                                        subprocess.call(
+                                            command_2, shell=True)
+                                        
+                                        try:
+                                            with open(f'{buggy_path}/{api_}_error.txt', 'w') as f:
+                                                f.write(res.stderr)
+                                        except Exception as e:
+                                            print('Could not write the std error!')
+                                        #command_ = f"find {tf_output_dir} -name '*.py' -exec cp {{}} {buggy_path} \;"
+                                        
+                                        subprocess.call(
+                                            command_, shell=True)
+                                        
+                                        #subprocess.call(f'find {tf_output_dir} -name "*.py" -exec rm {{}} \;', shell=True)
                                     else:
-                                        dump_data(f"{api_}\n", join(
-                                            tf_output_dir, "runcrashround2.txt"), "a")
-
-                                    buggy_path = f"{tf_output_dir}/{tool}_bugs"
-
-                                    if not os.path.exists(buggy_path):
-                                        os.makedirs(buggy_path, exist_ok=True)
-
-                                    command_ = f"cp -r {tf_output_dir}/temp.py {buggy_path}/{api_}.py"
-                                    
-                                    command_2 = f"cp -r {tf_output_dir}/rule_temp.txt {buggy_path}/{api_}_output.txt"
-                                  
-                                    subprocess.call(
-                                        command_2, shell=True)
-                                      
-                                    try:
-                                        with open(f'{buggy_path}/{api_}_error.txt', 'w') as f:
-                                            f.write(res.stderr)
-                                    except Exception as e:
-                                        print('Could not write the std error!')
-                                    #command_ = f"find {tf_output_dir} -name '*.py' -exec cp {{}} {buggy_path} \;"
-                                    
-                                    subprocess.call(
-                                        command_, shell=True)
-                                    
-                                    #subprocess.call(f'find {tf_output_dir} -name "*.py" -exec rm {{}} \;', shell=True)
-                                else:
-                                    print(f"{Fore.GREEN} I found a: {res.stderr}{Style.RESET_ALL}")
+                                        print(f"{Fore.GREEN} I found a: {res.stderr}{Style.RESET_ALL}")
+                        else:
+                            print("API Skipped!")
                     else:
-                        print("API Skipped!")
-                else:
-                    print("This module does not exist in tensorflow")
+                        print("This module does not exist in tensorflow")
             else:
                 print('API already tested!')
         else:
@@ -310,7 +306,7 @@ def str_to_bool_list(value):
 
 
 if __name__ == "__main__":
-    Epilog = """An example usage: python run_fuzzer.py --database="freefuzz-tf" --library="tf" --release="2.11.0" --tool="orion" --experiment_round=1 --component1="False" --component2="True" --component3="True"""
+    Epilog = """An example usage: python run_fuzzer.py --database="freefuzz-tf" --library="tf" --release="2.11.0" --tool="orion" --experiment_round=1"""
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description='Extract commits from github repositories.', epilog=Epilog)
 
@@ -327,13 +323,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--config_dir', default=1,
                         type=str, help='Please specify the dir for configurations.')
-
-    parser.add_argument('--component1', type=str, default=True,
-                        help='In component 1, the rules are run in prioritized order.')
-    parser.add_argument('--component2', default=True, type=str,
-                        help='In component 2, dimension mismatch is run.')
-    parser.add_argument('--component3', default=True, type=str,
-                        help='In Component 3, random argument fuzzing is done')
 
     args = parser.parse_args()
 

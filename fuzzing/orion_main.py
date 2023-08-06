@@ -159,27 +159,23 @@ def count_tensor_inputs(api, lib="Tensorflow"):
     return tensor_holder
 
 if __name__ == "__main__":
-    library = sys.argv[1]
-    api_name = sys.argv[2]
-    index = sys.argv[3]
-    tool_name = sys.argv[4]
-    dbname = sys.argv[5]
-    output_dir = sys.argv[6]
-    component1 = sys.argv[7]
-    component2 = sys.argv[8]
-    component3 = sys.argv[9]
+    # library = sys.argv[1]
+    # api_name = sys.argv[2]
+    # index = sys.argv[3]
+    # tool_name = sys.argv[4]
+    # dbname = sys.argv[5]
+    # output_dir = sys.argv[6]
+    # component = sys.argv[7]
     
 
-    # library = "torch"
-    # api_name = "torch.nextafter"
-    # index = 1
-    # tool_name = "orion"
-    # dbname = 'deeprel-torch'
-    # release = "1.12.0"
-    # output_dir = f"/media/nimashiri/SSD/testing_results/{tool_name}/{library}/{release}"
-    # component1 = "True"
-    # component2 = "False"
-    # component3 = "False"
+    library = "torch"
+    api_name = "torch.nextafter"
+    index = 1
+    tool_name = "orion"
+    dbname = 'deeprel-torch'
+    release = "1.12.0"
+    output_dir = f"/media/nimashiri/SSD/testing_results/{tool_name}/{library}/{release}"
+    component = "component3"
     
 
     # output_dir = "/media/nimashiri/SSD/testing_results"
@@ -187,29 +183,45 @@ if __name__ == "__main__":
         os.makedirs(output_dir)
 
     rules = [
-        "MUTATE_PREEMPTIVES",
-        "NEGATE_INT_TENSOR",
+        "LARGE_INTEGER",
+        "NEGATIVE_INTEGER",
+        "NEGATIVE_LARGE_INTEGER",
+        "ZERO_INTEGER",
+        "EMPTY_INTEGER",
+        "NAN_INTEGER",
+        "NONE_INTEGER",
+        "LARGE_FLOAT",
+        "NEGATIVE_FLOAT",
+        "NEGATIVE_LARGE_FLOAT",
+        "ZERO_FLOAT",
+        "EMPTY_FLOAT",
+        "NAN_FLOAT",
+        "NONE_FLOAT",
+        "INVALID_STRING",
+        "EMPTY_STRING1",
+        "EMPTY_STRING2",
+        "NAN_STRING",
+        "NONE_STRING",
         "RANK_REDUCTION_EXPANSION",
         "EMPTY_TENSOR_TYPE1",
         "EMPTY_TENSOR_TYPE2",
         "EMPTY_LIST",
+        "LARGE_TENSOR_TYPE1",
+        "LARGE_TENSOR_TYPE2",
+        "LARGE_LIST_ELEMENT",
         "ZERO_TENSOR_TYPE1",
         "ZERO_TENSOR_TYPE2",
         "NAN_TENSOR",
         "NAN_TENSOR_WHOLE",
         "NON_SCALAR_INPUT",
-        "SCALAR_INPUT",
-        "LARGE_TENSOR_TYPE1",
-        "LARGE_TENSOR_TYPE2",
-        "LARGE_LIST_ELEMENT",
-    ]
+        "SCALAR_INPUT"]
 
     if "tf" in library or "tf_new" in library:
 
         MyTF = TFLibrary(output_dir)
         TFDatabase.database_config("localhost", 27017, dbname)
         
-        if component1 == "True":
+        if component == "component1":
                 com = "com1"
                 for itr in range(1000):
                     api = TFAPI(api_name)
@@ -218,26 +230,19 @@ if __name__ == "__main__":
                         _type = repr(api.args[arg].type)
                         sub_partitions = partitions[_type]
                         for part in sub_partitions:
-                                print(
-                                    '###############################################################################################')
-                                print(
-                                    f"Running on component {com}####API::{api_name}####Argument::{arg}####Partition::{part} Iteration::{itr}")
-                                print(
-                                    '###############################################################################################')
-                                api.each_arg_mutate(api.args[arg], part)
-                                
-                                # write rule
-                                
+                            print('#######################################################################################################')
+                            print(f"Running on component {com}####API::{api_name}####Argument::{arg}####Partition::{part} Iteration::{itr}")
+                            print('#######################################################################################################')
+                            api.each_arg_mutate(api.args[arg], part)
 
-                                with open(f'{output_dir}/rule_temp.txt', 'w') as f:         
-                                    f.write(",".join(map(str, ['M1', api_name, arg, part])))
-                                MyTF.test_with_oracle(api, OracleType.CRASH)
-                                api.api = api_name
-                                MyTF.test_with_oracle(api, OracleType.CUDA)
-                                api.api = api_name
-                                api = original_api
-
-        if component2 == 'True':
+                            with open(f'{output_dir}/rule_temp.txt', 'w') as f:         
+                                f.write(",".join(map(str, ['M1', api_name, arg, part])))
+                            MyTF.test_with_oracle(api, OracleType.CRASH)
+                            api.api = api_name
+                            MyTF.test_with_oracle(api, OracleType.CUDA)
+                            api.api = api_name
+                            api = original_api
+        if component == 'component2':
             com = "com2"
             try:
                 for k in range(1):
@@ -270,7 +275,7 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
 
-        if component3 == 'True':
+        if component == 'component3':
             com = 'com3'
             try:
                 for k in range(1):
@@ -313,7 +318,7 @@ if __name__ == "__main__":
 
         MyTorch = TorchLibrary(output_dir)
 
-        if component1 == 'True':
+        if component == 'component1':
             com = 'com1'
             for itr in range(1000):
                 api = TorchAPI(api_name)
@@ -340,7 +345,7 @@ if __name__ == "__main__":
                         #api.args[arg] = original_arg
                         api = original_api
                         
-        if component2 == 'True':
+        if component == 'component2':
             com = 'com2'
             try:
                 for k in range(1):
@@ -367,7 +372,7 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
 
-        if component3 == 'True':
+        if component == 'component3':
             com = 'com2'
             try:
                 for k in range(1):

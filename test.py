@@ -8,7 +8,7 @@ try:
   segment_ids_1 = False
   segment_ids_2 = 125091515651
   segment_ids = [segment_ids_0,segment_ids_1,segment_ids_2,]
-  name = None
+  name = '안녕하세요'
   out = tf.math.segment_mean(data=data,segment_ids=segment_ids,name=name,)
 except Exception as e:
   print("Error:"+str(e))

@@ -1900,10 +1900,63 @@ class TFArgument(Argument):
         return ""
 
     def new_mutation_multiple(self, RULE=None):
-        if RULE == "MUTATE_PREEMPTIVES":
-            self.mutate_preemptives()
-        elif RULE == "NEGATE_INT_TENSOR":
-            self.mutate_negative()
+        if RULE == "LARGE_INTEGER":
+            if self.type == ArgType.INT: 
+                self.mutate_integer(large=True)
+        elif RULE == "NEGATIVE_INTEGER":
+            if self.type == ArgType.INT: 
+                self.mutate_integer(neg=True)
+        elif RULE == "NEGATIVE_LARGE_INTEGER":
+            if self.type == ArgType.INT: 
+                self.mutate_integer(neg_large=True)
+        elif RULE == "ZERO_INTEGER":
+            if self.type == ArgType.INT: 
+                self.mutate_integer(zero=True)
+        elif RULE == "EMPTY_INTEGER":
+            if self.type == ArgType.INT: 
+                self.mutate_integer(empty=True)
+        elif RULE == "NAN_INTEGER":
+            if self.type == ArgType.INT: 
+                self.mutate_integer(nan=True)
+        elif RULE == "NONE_INTEGER":
+            if self.type == ArgType.INT: 
+                self.mutate_integer(none=True)
+        elif RULE == "LARGE_FLOAT":
+            if self.type == ArgType.FLOAT: 
+                self.mutate_float(large=True)
+        elif RULE == "NEGATIVE_FLOAT":
+            if self.type == ArgType.FLOAT: 
+                self.mutate_float(neg=True)     
+        elif RULE == "NEGATIVE_LARGE_FLOAT":
+            if self.type == ArgType.FLOAT: 
+                self.mutate_float(neg_large=True)
+        elif RULE == "ZERO_FLOAT":
+            if self.type == ArgType.FLOAT: 
+                self.mutate_float(zero=True)
+        elif RULE == "EMPTY_FLOAT":
+            if self.type == ArgType.FLOAT: 
+                self.mutate_float(empty=True)
+        elif RULE == "NAN_FLOAT":
+            if self.type == ArgType.FLOAT: 
+                self.mutate_float(nan=True)
+        elif RULE == "NONE_FLOAT":
+            if self.type == ArgType.FLOAT: 
+                self.mutate_integer(none=True)
+        elif RULE == "INVALID_STRING":
+            if self.type == ArgType.STR: 
+                self.mutate_str(invalid=True)
+        elif RULE == "EMPTY_STRING1":
+            if self.type == ArgType.STR:
+                self.mutate_str(empty1=True)
+        elif RULE == "EMPTY_STRING2":
+            if self.type == ArgType.STR:
+                self.mutate_str(empty2=True)
+        elif RULE == "NAN_STRING":
+            if self.type == ArgType.STR:
+                self.mutate_str(nan=True)
+        elif RULE == "NONE_STRING":
+            if self.type == ArgType.STR:
+                self.mutate_str(none=True)
         elif RULE == "RANK_REDUCTION_EXPANSION":
             self.modify_rank()
         elif RULE == "EMPTY_TENSOR_TYPE1":
@@ -2206,56 +2259,78 @@ class TFArgument(Argument):
             self.value = b_
         else:
             return
-    
-    def mutate_integer(self, zero=False, large=False, neg=False, neg_large=False, nan=False, none=False, empty=False) -> int:
-        if zero:
-            self.value = 0
-        elif large:
-            new_value = random.choice([1250999896764, 1250999896765, 1250999896766, 1250999900000])
-            self.value = new_value
-        elif neg:
-            new_value = random.randint(1e3, 1e5)
-            self.value = -new_value
-        elif neg_large:
-            negs = [1250999896764,
-            1000000000000,
-            999999999999,
-            123456789,
-            1000000,
-            10000,
-            1000,
-            100,
-            10,
-            1,
-            100000000,
-            1234567890,
-            987654321,
-            12345678910,
-            100000000000,
-            999999999999,
-            10000000000000,
-            12345678987654321,
-            98765432123456789,
-            100000000000000,
-            9999999999999999,
-            10000000000000000,
-            123456789876543210,
-            987654321234567890,
-            1000000000000000,
-            99999999999999999]
-            new_value = random.choice(negs)
-            self.value = -new_value
-        elif nan:
-            self.value = float('nan')
-        elif none:
-            self.value = None
-        elif empty:
-            self.value = [()]
-        else:
-            new_value = random.randint(1e3, 1e5)
-            val_ = -new_value
-            self.value = val_
-
+        
+        def mutate_integer(self, zero=False, large=False, neg=False, neg_large=False, nan=False, none=False, empty=False) -> int:
+            if zero:
+                self.value = 0.0
+            elif large:
+                values = [2**8, 
+                        2**22, 
+                        2**24, 
+                        1012756988, 
+                        498444555, 
+                        545646544, 
+                        536870912, 
+                        36028797018963968, 
+                        1250999896764, 
+                        10 ** 6,
+                        2**60-1,
+                        1676240524292489355,
+                        100000000,
+                        1610637938,
+                        1e38,
+                        1e20,
+                        65534,
+                        8968073515812833920,
+                        2 ** 31,
+                        92233720368,
+                        1610612736,
+                        3046875451,
+                        1048576,
+                        2147483647]
+                new_value = random.choice(values)
+                self.value = new_value
+            elif neg:
+                new_value = random.randint(1e3, 1e5)
+                self.value = -new_value
+            elif neg_large:
+                values = [2**8, 
+                        2**22, 
+                        2**24, 
+                        1012756988, 
+                        498444555, 
+                        545646544, 
+                        536870912, 
+                        36028797018963968, 
+                        1250999896764, 
+                        10 ** 6,
+                        2**60-1,
+                        1676240524292489355,
+                        100000000,
+                        1610637938,
+                        1e38,
+                        1e20,
+                        65534,
+                        8968073515812833920,
+                        2 ** 31,
+                        92233720368,
+                        1610612736,
+                        3046875451,
+                        1048576,
+                        2147483647]
+                new_value = random.choice(values)
+                self.value = -new_value
+            elif nan:
+                self.value = float('nan')
+            elif none:
+                self.value = None
+            elif empty:
+                self.value = [()]
+            else:
+                new_value = random.randint(1e3, 1e5)
+                val_ = -new_value
+                self.value = val_
+   
     def mutate_float(self, zero=False, large=False, neg=False, neg_large=False, nan=False, none=False, empty=False) -> float:
         if zero:
             self.value = 0.0
@@ -2263,28 +2338,69 @@ class TFArgument(Argument):
             new_value = random.choice([3.402823e+38, 1.986e+67])
             self.value = new_value
         elif neg_large:
-            negs_large = [-1.0,
-            -100.0,
-            -1000.0,
-            -10000.0,
-            -100000.0,
-            -1000000.0,
-            -10000000.0,
-            -100000000.0,
-            -1000000000.0]
-            self.value = random.choice(negs_large)   
+            value = [1250999996764.1,
+                    10000000000000.0,
+                    1.7976931348623157e+308,
+                    9007199254740992.0,
+                    0.0,
+                    12345678901234.56,
+                    1.4013e-45,
+                    9.88131e-324,
+                    1.17549435082e-38,
+                    3.402823466e+38,
+                    1.4013e-45,
+                    1111111111111111.1,
+                    2.2250738585072014e-308,
+                    4444444444444.44,
+                    123456789123.321,
+                    3.141592653589793,
+                    2.718281828459045,
+                    9876543210.123456,
+                    1010101010.10101,
+                    1717171717.1717172,
+                    2.7182818284590455,
+                    3007199254740992.7,
+                    41421356237309515,
+                    7171717171717.717,
+                    78964512365478965.22,
+                    999999999999999999.2]
+            new_value = random.choice(value)
+            self.value = - new_value
         elif neg:
-            negs = [-1.9,
-            -1.8,
-            -1.7,
-            -1.6,
-            -1.5,
-            -1.4,
-            -1.3,
-            -1.2,
-            -1.1,
-            -1.0]
-            self.value = random.choice(negs)
+            values = [0.1,
+                0.5,
+                0.75,
+                1.0,
+                1.5,
+                2.0,
+                2.5,
+                3.0,
+                3.5,
+                4.0,
+                4.5,
+                5.0,
+                10.0,
+                50.0,
+                100.0,
+                500.0,
+                1000.0,
+                1e05,
+                0.0001,
+                0.001,
+                0.01,
+                1e10,
+                1e15,
+                1e20,
+                1e25,
+                1e30,
+                1e35,
+                1e40,
+                1.23456789,
+                999999999.9999999,
+                1.7976931348623157e+308,
+                2.2250738585072014e308]
+            new_value = random.choice(negs)
+            self.value = -new_value
         elif nan:
             self.value = float('nan')
         elif none:
@@ -2295,34 +2411,14 @@ class TFArgument(Argument):
             new_value = random.random()
             val_ = -new_value
             self.value = val_
-
-    def generate_junk_string(self, length):
-        characters = string.ascii_letters + string.digits + string.punctuation
-        junk_string = ''.join(random.choice(characters) for _ in range(length))
-        return junk_string
-
+    
     def mutate_str(self, invalid=False, empty1=False, nan=False, none=False, empty2=False) -> str:
         if invalid:
-            # garbage_bytes = bytes([random.randint(0, 255)
-            #                       for _ in range(len(self.value))])
-            # garbage_string = repr(garbage_bytes)
-            #self.value = self.generate_junk_string(len(self.value))
-            
-            str_vals = [
-            "../../../../../../etc/passwd",
-            "DROP TABLE users; --",
-            "<script>alert('XSS');</script>",
-            "SELECT * FROM users WHERE username='admin' OR '1'='1'",
-            "<?php echo shell_exec('cat /etc/passwd');?>",
-            "rm -rf /",
-            "1'; DROP TABLE users; --",
-            " OR 1=1; DROP TABLE users; --",
-            "<script>alert(document.cookie)</script>",
-            "<?php system($_GET['cmd']); ?>",
-            "../../../../../../etc/passwd",
-            "OR '1'='1'; --",
-            "<img src='x' onerror='alert(document.cookie)'>"]
-            self.value = "8.8"
+            non_ascii_list = [chr(i) for i in range(128, 256)]
+            def generate_random_word(length):
+                return ''.join(random.choice(non_ascii_list) for _ in range(length))
+            random_words = [generate_random_word(random.randint(5, 10)) for _ in range(5)]
+            self.value = random.choice(random_words)
         if nan:
             self.value = float('nan')
         elif none:
@@ -2330,7 +2426,7 @@ class TFArgument(Argument):
         elif empty1:
             self.value = []
         elif empty2:
-            self.value = "8.8"
+            self.value = " "
 
     def modify_tensor_rank(self, large=False, neg=False, zero=False, empty=False, neg_large=False):
         if large:
