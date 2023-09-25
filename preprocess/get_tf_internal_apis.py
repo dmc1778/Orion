@@ -42,16 +42,16 @@ def write_to_disc(filecontent, target_path):
         f_method.close()
 
 def save_objects(stmt):
-    objects_path = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/import_objects/'+stmt+'.py'
+    objects_path = '/media//DATA/vsprojects/FSE23_2/data/tf/import_objects/'+stmt+'.py'
 
     text_code = f'''\
 from tensorflow.python.client import timeline
 import pickle
-with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/import_objects/{stmt}', 'wb') as outp:  # Overwrites any existing file.
+with open('/media//DATA/vsprojects/FSE23_2/data/tf/import_objects/{stmt}', 'wb') as outp:  # Overwrites any existing file.
     pickle.dump(timeline, outp, pickle.HIGHEST_PROTOCOL)
     '''    
     write_to_disc([text_code], objects_path)
-    subprocess.run(['python3 /media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/import_objects/'+stmt+'.py'], shell=True)
+    subprocess.run(['python3 /media//DATA/vsprojects/FSE23_2/data/tf/import_objects/'+stmt+'.py'], shell=True)
     subprocess.call('rm -rf '+stmt+'.py', shell=True)
 
 def get_parent_module(file_addr):
@@ -83,7 +83,7 @@ def get_ast_functions(ast_tree):
 def get_tf_apis():
     dict_obj = {}
     counter = 0
-    for root, dirs, files in os.walk('/media/nimashiri/SSD/tensorflow/tensorflow/python/'):
+    for root, dirs, files in os.walk('/media//SSD/tensorflow/tensorflow/python/'):
         for module in dirs:
             if module not in skip_list:
                 current_module = os.path.join(root, module)
@@ -101,7 +101,7 @@ def get_tf_apis():
                                     # get_doc_string_examples(ast_tree) 
                                     import_stmt, module_name = get_parent_module(file_to_be_processed)
                                     # save_objects(module_name)
-                                    write_list_to_txt(import_stmt, '/media/nimashiri/SSD/FSE23_2/data/tf/tf_internal_imports.txt')
+                                    write_list_to_txt(import_stmt, '/media//SSD/FSE23_2/data/tf/tf_internal_imports.txt')
 
                                     dict_obj[module_name] = []
                                     for module in f_names:
@@ -112,7 +112,7 @@ def get_tf_apis():
                                 print(e)
 
     
-    with open('/media/nimashiri/SSD/FSE23_2/data/tf/tf_apis/tf_apis.json', 'w') as fp:
+    with open('/media//SSD/FSE23_2/data/tf/tf_apis/tf_apis.json', 'w') as fp:
         json.dump(dict_obj, fp, indent=4)
 
 if __name__ == '__main__':

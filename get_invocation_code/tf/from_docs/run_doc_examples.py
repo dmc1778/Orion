@@ -62,24 +62,24 @@ def run_example(api_, data):
         print(e)
     if result.stderr:
         mydata = [api_, result.stderr]
-        with open('/media/nimashiri/SSD/FSE23_2/data/tf/tf_apis/corrupted_doc_example.csv', 'a', newline='\n') as fd:
+        with open('/media//SSD/FSE23_2/data/tf/tf_apis/corrupted_doc_example.csv', 'a', newline='\n') as fd:
             writer_object = writer(fd)
             writer_object.writerow(mydata)
     subprocess.call('rm -rf example.py', shell=True)
 
 
 if __name__ == '__main__':
-    hist_addr = '/media/nimashiri/SSD/FSE23_2/get_invocation_code/tf/from_docs/hist.txt'
+    hist_addr = '/media//SSD/FSE23_2/get_invocation_code/tf/from_docs/hist.txt'
 
     if not os.path.exists(hist_addr):
         f1 = open(hist_addr, 'a')
 
     hist = read_txt(hist_addr)
 
-    # subprocess.call('cp -r /media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/tf_apis/write_tools.py /home/nimashiri/.local/lib/python3.8/site-packages/torch/', shell=True)
+    # subprocess.call('cp -r /media//DATA/vsprojects/FSE23_2/data/tf/tf_apis/write_tools.py /home//.local/lib/python3.8/site-packages/torch/', shell=True)
 
     data = pd.read_csv(
-        '/media/nimashiri/SSD/FSE23_2/data/tf/tf_apis/tf_APIs_signatures.csv')
+        '/media//SSD/FSE23_2/data/tf/tf_apis/tf_APIs_signatures.csv')
 
     for id_, row in data.iterrows():
         if isinstance(row['Example'], str):
@@ -88,7 +88,7 @@ if __name__ == '__main__':
                 example = preprocess_examples(row['API'], row['Example'])
                 if example:
                     write_list_to_txt4(_api_name, hist_addr)
-                    # write_to_disc(example, '/media/nimashiri/SSD1/tf_api_examples/'+_api_name+'.py')
+                    # write_to_disc(example, '/media//SSD1/tf_api_examples/'+_api_name+'.py')
                     logging.info(
                         f'{id_}/{len(data)} examples has been executed!')
                     run_example(row['API'], example)

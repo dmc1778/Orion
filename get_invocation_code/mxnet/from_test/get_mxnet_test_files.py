@@ -4,7 +4,7 @@ import re
 
 ROOT_DIR = os.getcwd()
 
-MXNET_BASE_PATH = '/media/nimashiri/SSD1/mxnet/tests/python'
+MXNET_BASE_PATH = '/media//SSD1/mxnet/tests/python'
 
 def write_list_to_txt(data, project_name):
     fname = os.path.join(ROOT_DIR, 'data', project_name, project_name+'_test_files', project_name+'.txt')

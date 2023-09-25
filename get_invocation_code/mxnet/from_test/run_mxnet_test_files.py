@@ -24,7 +24,7 @@ def write_list_to_txt4(data, filename):
 def run_mxnet_tests(data):
     import os
 
-    _path_clean_tests = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/mxnet_test_files/history.txt'
+    _path_clean_tests = '/media//DATA/vsprojects/FSE23_2/data/mxnet/mxnet_test_files/history.txt'
 
 
     if not os.path.exists(_path_clean_tests):
@@ -46,12 +46,12 @@ def run_mxnet_tests(data):
                 except Exception as e:
                     print(e)
             else:
-                subprocess.call('rm -rf /media/nimashiri/DATA/mongodata/mongod.lock', shell=True)
-                subprocess.run(['mongod', '--dbpath', '/media/nimashiri/DATA/mongodata/', '--logpath', '/media/nimashiri/DATA/mongolog/mongo.log', '--fork'])
+                subprocess.call('rm -rf /media//DATA/mongodata/mongod.lock', shell=True)
+                subprocess.run(['mongod', '--dbpath', '/media//DATA/mongodata/', '--logpath', '/media//DATA/mongolog/mongo.log', '--fork'])
 
 if __name__ == '__main__':
-    subprocess.call('cp -r /media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/mxnet_test_files/write_tools.py /media/nimashiri/SSD1/mxnet/python/mxnet/', shell=True)
+    subprocess.call('cp -r /media//DATA/vsprojects/FSE23_2/data/mxnet/mxnet_test_files/write_tools.py /media//SSD1/mxnet/python/mxnet/', shell=True)
 
-    torch_tests = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/mxnet_test_files/mxnet.txt'
+    torch_tests = '/media//DATA/vsprojects/FSE23_2/data/mxnet/mxnet_test_files/mxnet.txt'
     data = read_txt(torch_tests)
     run_mxnet_tests(data)

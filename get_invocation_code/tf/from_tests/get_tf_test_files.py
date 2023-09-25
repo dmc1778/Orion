@@ -32,7 +32,7 @@ def getListOfFiles(dirName):
     return allFiles
 
 def main(args):
-    #target_path = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/tf_test_files/tf_tests_v2.4.0.txt'
+    #target_path = '/media//DATA/vsprojects/FSE23_2/data/tf/tf_test_files/tf_tests_v2.4.0.txt'
     #tf_root_path = 'path/to/tensorflow/cloned/dir'
     tf_root_path = args.tf_root_path
     output = args.output

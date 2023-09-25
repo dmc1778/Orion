@@ -107,11 +107,11 @@ def main():
                             for x, rep in enumerate(response['items']):
                                 if rep['watchers_count'] >= 100 and rep['size'] >= 100:
                                     if lib == 'pytorch':
-                                        f_path = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/wild/torch_repos.txt'
+                                        f_path = '/media//DATA/vsprojects/FSE23_2/data/torch/wild/torch_repos.txt'
                                     elif lib == 'tensorflow':
-                                        f_path = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/wild/tf_repos.txt'
+                                        f_path = '/media//DATA/vsprojects/FSE23_2/data/tf/wild/tf_repos.txt'
                                     else:
-                                        f_path = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/wild/mxnet_repos.txt'
+                                        f_path = '/media//DATA/vsprojects/FSE23_2/data/mxnet/wild/mxnet_repos.txt'
                                     write_list_to_txt4(rep['html_url'], f_path)
                 except Exception as e:
                     print(e)

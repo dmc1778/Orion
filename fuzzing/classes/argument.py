@@ -46,6 +46,7 @@ class Argument:
         self.value = value
         self.type = type
         self.non_scalar_input_flag = False
+        self.MISMATCH_OP = ''
 
     def activate_non_scalar_input_flag(self):
         self.non_scalar_input_flag = True

@@ -91,7 +91,7 @@ def find_valid_apis_torch(data):
         else:
             mydata = [v['API'], 'No input params', 'No example']
         
-        with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/APIs_validation_status.csv', 'a', newline='\n') as fd:
+        with open('/media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/APIs_validation_status.csv', 'a', newline='\n') as fd:
             writer_object = writer(fd)
             writer_object.writerow(mydata)
 
@@ -108,12 +108,12 @@ def get_torch_apis_raw_symbols_v2(data):
                 symbol_part = symbol_part.replace('torch.','')
                 mydata = [symbol_part, 'class']
 
-        with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis.csv', mode='a', newline='\n') as fd:
+        with open('/media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis.csv', mode='a', newline='\n') as fd:
             writer_object = writer(fd)
             writer_object.writerow(mydata)
 
-    subprocess.call('chmod +w /media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis.csv', shell=True)
-    subprocess.call('echo "nima1370" | sudo cp -r /media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis.csv /home/nimashiri/.local/lib/python3.8/site-packages/torch', shell=True)     
+    subprocess.call('chmod +w /media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis.csv', shell=True)
+    subprocess.call('echo "nima1370" | sudo cp -r /media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis.csv /home//.local/lib/python3.8/site-packages/torch', shell=True)     
     
 
 def find_valid_apis_tf(data):
@@ -137,7 +137,7 @@ def find_valid_apis_tf(data):
             has_api = parse_recursive_api_tree(ast_tree.body[1].value)
 
             if has_api:
-                write_list_to_txt4(api_no_sig,'/media/nimashiri/SSD1/FSE23_2/data/tf/tf_apis/tf_valid_APIs.txt')
+                write_list_to_txt4(api_no_sig,'/media//SSD1/FSE23_2/data/tf/tf_apis/tf_valid_APIs.txt')
                 # d = ['import tensorflow as tf', api_]
 
                 # write_to_disc(d, 'example.py')
@@ -156,13 +156,13 @@ def find_valid_apis_tf(data):
             else:
                 mydata = [v['API'], 'No input params', 'No example']
 
-                with open('/media/nimashiri/SSD1/FSE23_2/data/tf/tf_apis/filtered_apis.csv', 'a', newline='\n') as fd:
+                with open('/media//SSD1/FSE23_2/data/tf/tf_apis/filtered_apis.csv', 'a', newline='\n') as fd:
                     writer_object = writer(fd)
                     writer_object.writerow(mydata)
                 
         except Exception as e:
             mydata = [v['API'], e, 'No example']
-            with open('/media/nimashiri/SSD1/FSE23_2/data/tf/tf_apis/filtered_apis.csv', 'a', newline='\n') as fd:
+            with open('/media//SSD1/FSE23_2/data/tf/tf_apis/filtered_apis.csv', 'a', newline='\n') as fd:
                 writer_object = writer(fd)
                 writer_object.writerow(mydata)
 
@@ -194,12 +194,12 @@ def find_valid_apis_mxnet(data):
                     mydata = [v['API'].split('(')[0].split('.')[-1], 'class']
                 else:
                     mydata = [v['API'].split('(')[0].split('.')[-1], 'function']
-                with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/mxnet_valid_apis.csv', mode='a', newline='\n') as fd:
+                with open('/media//DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/mxnet_valid_apis.csv', mode='a', newline='\n') as fd:
                     writer_object = writer(fd)
                     writer_object.writerow(mydata)
             else:
                 mydata = [v['API'], 'No input params', 'No example']
-                with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/mxnet_invalid_apis.csv', mode='a', newline='\n') as fd:
+                with open('/media//DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/mxnet_invalid_apis.csv', mode='a', newline='\n') as fd:
                     writer_object = writer(fd)
                     writer_object.writerow(mydata)  
         
@@ -231,8 +231,8 @@ def get_apis_raw_symbols(data):
 
 
 def remove_dup_torch():
-    data_addr = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis_no_dup1.csv'
-    data_tensors_add = '/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_tensors1.csv'
+    data_addr = '/media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis_no_dup1.csv'
+    data_tensors_add = '/media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_tensors1.csv'
 
     data_tensors = pd.read_csv(data_tensors_add, sep=',', encoding='utf-8')
     data_normal = pd.read_csv(data_addr, sep=',', encoding='utf-8')
@@ -242,25 +242,25 @@ def remove_dup_torch():
         q_api = row['API'].split('.')[-1]
         if q_api not in root_apis:
             mydata = [row['API'], row['Status']]
-            with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/pure_tensors.csv', mode='a', newline='\n') as fd:
+            with open('/media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/pure_tensors.csv', mode='a', newline='\n') as fd:
                 writer_object = writer(fd)
                 writer_object.writerow(mydata)        
 
     # data = pd.read_csv(data_tensors, sep=',', encoding='utf-8')
     # d = data[data['API'].str.match(r'(Tensor\.)')]
-    # d.to_csv('/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_tensors1.csv')
+    # d.to_csv('/media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_tensors1.csv')
 
     # patternDel = "(Tensor\.)"
     # filter = data['API'].str.contains(patternDel)
     # data = data[~filter]
-    # data.to_csv('/media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis_no_dup1.csv')
+    # data.to_csv('/media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/torch_apis_no_dup1.csv')
     
     
 
 if __name__ == '__main__':
 
     lib_name = 'tf'
-    data = pd.read_csv(f'/media/nimashiri/SSD1/FSE23_2/data/{lib_name}/{lib_name}_apis/tf_APIs_signatures.csv')
+    data = pd.read_csv(f'/media//SSD1/FSE23_2/data/{lib_name}/{lib_name}_apis/tf_APIs_signatures.csv')
     # get_torch_apis_raw_symbols_v2(data)
     
     

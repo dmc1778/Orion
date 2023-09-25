@@ -44,19 +44,19 @@ def run_example(api_, data):
         print(e)
     if result.stderr:
         mydata = [api_, result.stderr]
-        with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/tf_apis/corrupted_doc_example.csv', 'a', newline='\n') as fd:
+        with open('/media//DATA/vsprojects/FSE23_2/data/tf/tf_apis/corrupted_doc_example.csv', 'a', newline='\n') as fd:
             writer_object = writer(fd)
             writer_object.writerow(mydata)
     subprocess.call('rm -rf example.py', shell=True)
 
 if __name__ == '__main__':
-    # subprocess.call('cp -r /media/nimashiri/DATA/vsprojects/FSE23_2/data/tf/tf_apis/write_tools.py /home/nimashiri/.local/lib/python3.8/site-packages/torch/', shell=True)
-    data = pd.read_csv('/media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/mxnet_APIs_signatures.csv')
+    # subprocess.call('cp -r /media//DATA/vsprojects/FSE23_2/data/tf/tf_apis/write_tools.py /home//.local/lib/python3.8/site-packages/torch/', shell=True)
+    data = pd.read_csv('/media//DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/mxnet_APIs_signatures.csv')
     for id_, row in data.iterrows():
         logging.info(f'{id_}/{len(data)} examples has been executed!')
         if isinstance(row['Example'], str):
             mydata = [row['API']]
-            with open('/media/nimashiri/DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/api_with_doc_example.csv', 'a', newline='\n') as fd:
+            with open('/media//DATA/vsprojects/FSE23_2/data/mxnet/mxnet_apis/api_with_doc_example.csv', 'a', newline='\n') as fd:
                 writer_object = writer(fd)
                 writer_object.writerow(mydata)
 

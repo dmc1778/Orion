@@ -2,12 +2,12 @@
 import os 
 import re
 
-ROOT_DIR = 'media/nimashiri/SSD/FSE23_2'
+ROOT_DIR = 'media//SSD/FSE23_2'
 
-TORCH_BASE_PATH = '/media/nimashiri/SSD/pytorch/test'
+TORCH_BASE_PATH = '/media//SSD/pytorch/test'
 
 def write_list_to_txt(data):
-    fname = os.path.join('/media/nimashiri/SSD/FSE23_2/data/torch/torch_test_files/torch_tests.txt')
+    fname = os.path.join('/media//SSD/FSE23_2/data/torch/torch_test_files/torch_tests.txt')
     with open(fname, "a") as file:
         #for row in data:
         file.write(str(data)+'\n')

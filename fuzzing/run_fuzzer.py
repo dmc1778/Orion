@@ -134,16 +134,20 @@ def pre_run_check(api_):
 
 
 def search_in_dataset(api_name, lib):
+    data = read_txt('/media//SSD/FSE23_2/data/benchmarking/tf_test_apis.txt')
+    
     flag = False
-    if lib == 'torch':
-        data = pd.read_csv(
-            '/media/nimashiri/SSD/FSE23_2/data/benchmarking/torch_data.csv')
-    else:
-        data = pd.read_csv(
-            '/media/nimashiri/SSD/FSE23_2/data/benchmarking/tf_data.csv')
-    for idx, row in data.iterrows():
-        if api_name == row['Buggy API']:
-            flag = True
+    if api_name in data:
+        flag = True
+    # if lib == 'torch':
+    #     data = pd.read_csv(
+    #         '/media//SSD/FSE23_2/data/benchmarking/torch_data.csv')
+    # else:
+    #     data = pd.read_csv(
+    #         '/media//SSD/FSE23_2/data/benchmarking/tf_data_fse24.csv')
+    # for idx, row in data.iterrows():
+    #     if api_name == row['API Name']:
+    #         flag = True
     return flag
 
 
@@ -157,7 +161,7 @@ def run_fuzzer(args):
     # component1 = 'True'
     # component2 = 'True'
     # component3 = 'True'
-    # release = "v2.3.0"
+    # release = "2.4.0"
     
     dbname = args.database
     library = args.library
@@ -165,15 +169,19 @@ def run_fuzzer(args):
     tool = args.tool
     round_exp = args.experiment_round
     config_name = args.config_dir
+    
+    
 
-    tf_output_dir = f"/media/nimashiri/SSD/testing_results/{tool}/{library}/{release}"
+    #for numRun in range(5):
+    #library = f"{library}_{numRun}"
+    tf_output_dir = f"/media//SSD/testing_results/{tool}/{library}/{release}"
 
     if not os.path.exists(tf_output_dir):
         os.makedirs(tf_output_dir, exist_ok=True)
 
     mydb = myclient[dbname]
-    #TorchDatabase.database_config("localhost", 27017, dbname)
-    config_name = "/media/nimashiri/SSD/FSE23_2/fuzzing/config/expr.conf"
+        #TorchDatabase.database_config("localhost", 27017, dbname)
+    config_name = "/media//SSD/FSE23_2/fuzzing/config/expr.conf"
 
     if round_exp == 1:
         data = mydb.list_collection_names()
@@ -188,6 +196,7 @@ def run_fuzzer(args):
 
     hist = read_txt(f'{tool}_{library}_{release}_executed_apis.txt')
     components = ['component1', 'component2', 'component3']
+        
     for i, api_ in enumerate(data):
         if api_ not in hist:
             #api_ = "tensorflow.python.eager.lift_to_graph.lift_to_graph"
@@ -197,23 +206,25 @@ def run_fuzzer(args):
             if flag:        
                 for component in components:
                     print(
-                        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                     print(f"Running API {api_}::{i}/{len(data)} ON {component}")
                     print(
-                        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-                    if 'tensorflow.python' in api_:
-                        prerun_flag = pre_run_check(api_)
-                    else:
-                        prerun_flag = False
-                    if prerun_flag == False:
+                            "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                    # if 'tensorflow.python' in api_:
+                    #     prerun_flag = pre_run_check(api_)
+                    # else:
+                    #     prerun_flag = False
+                    # prerun_flag = True
+                    
+                    
                         # skip_flag = find_skip_list(api_)
-                        if "__main__" not in api_:
+                    if "__main__" not in api_:
                             try:
                                 if tool == "orion":
                                     res = subprocess.run(
                                         [
                                             "python3",
-                                            "/media/nimashiri/SSD/FSE23_2/fuzzing/orion_main.py",
+                                            "/media//SSD/FSE23_2/fuzzing/orion_main.py",
                                             library,
                                             api_,
                                             str(i),
@@ -227,20 +238,21 @@ def run_fuzzer(args):
                                         shell=False,
                                         timeout=100,
                                     )
+                                    print('sdsdsd')
                                 elif tool == "FreeFuzz":
                                     res = subprocess.run(
-                                        [
-                                            "python3",
-                                            "/media/nimashiri/SSD/FSE23_2/fuzzing/freefuzz_api_main.py",
-                                            config_name,
-                                            library,
-                                            api_,
-                                            str(i),
-                                            tool,
-                                        ],
-                                        shell=False,
-                                        timeout=100,
-                                    )
+                                            [
+                                                "python3",
+                                                "/media//SSD/FSE23_2/fuzzing/freefuzz_api_main.py",
+                                                config_name,
+                                                library,
+                                                api_,
+                                                str(i),
+                                                tool,
+                                            ],
+                                            shell=False,
+                                            timeout=100,
+                                        )
                                 else:
                                     print("No tool provided")
                             except subprocess.TimeoutExpired:
@@ -249,8 +261,8 @@ def run_fuzzer(args):
                             except Exception as e:
                                 dump_data(
                                     f"{api_}\n  {e}\n", join(
-                                        tf_output_dir, "runerror.txt"), "a"
-                                )
+                                            tf_output_dir, "runerror.txt"), "a"
+                                    )
                             else:
                                 if res.returncode != 0:
                                     if "AttributeError: module" not in res.stderr and "NameError:" not in res.stderr:
@@ -268,31 +280,27 @@ def run_fuzzer(args):
                                             os.makedirs(buggy_path, exist_ok=True)
 
                                         command_ = f"cp -r {tf_output_dir}/temp.py {buggy_path}/{api_}.py"
-                                        
+                                            
                                         command_2 = f"cp -r {tf_output_dir}/rule_temp.txt {buggy_path}/{api_}_output.txt"
-                                    
-                                        subprocess.call(
-                                            command_2, shell=True)
                                         
+                                        subprocess.call(command_2, shell=True)
+                                            
                                         try:
                                             with open(f'{buggy_path}/{api_}_error.txt', 'w') as f:
                                                 f.write(res.stderr)
                                         except Exception as e:
                                             print('Could not write the std error!')
-                                        #command_ = f"find {tf_output_dir} -name '*.py' -exec cp {{}} {buggy_path} \;"
-                                        
-                                        subprocess.call(
-                                            command_, shell=True)
-                                        
-                                        #subprocess.call(f'find {tf_output_dir} -name "*.py" -exec rm {{}} \;', shell=True)
+                                            #command_ = f"find {tf_output_dir} -name '*.py' -exec cp {{}} {buggy_path} \;"
+                                            
+                                        subprocess.call(command_, shell=True)
+                                            
+                                            #subprocess.call(f'find {tf_output_dir} -name "*.py" -exec rm {{}} \;', shell=True)
                                     else:
                                         print(f"{Fore.GREEN} I found a: {res.stderr}{Style.RESET_ALL}")
-                        else:
-                            print("API Skipped!")
                     else:
-                        print("This module does not exist in tensorflow")
+                        print("API Skipped!")
             else:
-                print('API already tested!')
+                print('This API is not in our target API list!')
         else:
             print('This api has been already tested!')
 
@@ -308,11 +316,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description='Extract commits from github repositories.', epilog=Epilog)
 
-    parser.add_argument('--database', type=str, default="freefuzz-tf",
+    parser.add_argument('--database', type=str, default="orion-tf1",
                         help='Please enter the name of the database.')
     parser.add_argument('--library', type=str, default="tf",
                         help='Please enter the library name.')
-    parser.add_argument('--release', type=str, default="2.11.0",
+    parser.add_argument('--release', type=str, default="2.13.0",
                         help='Please enter the library name.')
     parser.add_argument('--tool', type=str, default="orion",
                         help='Please enter the name of the tool')
@@ -328,5 +336,6 @@ if __name__ == "__main__":
         parser.print_help()
         sys.exit(-1)
 
+    
     run_fuzzer(args)
     # run_fuzzer()

@@ -4,7 +4,7 @@ import re
 
 ROOT_DIR = os.getcwd()
 
-TORCH_BASE_PATH = '/media/nimashiri/SSD1/pytorch/test'
+TORCH_BASE_PATH = '/media//SSD1/pytorch/test'
 
 def write_list_to_txt(data, project_name):
     fname = os.path.join(ROOT_DIR, 'data', project_name, project_name+'_test_files', project_name+'.txt')

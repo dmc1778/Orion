@@ -50,14 +50,14 @@ def run_example(api_, ex_doc):
         print(e)
     if result.stderr:
         mydata = [api_, ex_doc, result.stderr]
-        with open('/media/nimashiri/SSD/FSE23_2/data/torch/torch_apis/x.csv', 'a', newline='\n') as fd:
+        with open('/media//SSD/FSE23_2/data/torch/torch_apis/x.csv', 'a', newline='\n') as fd:
             writer_object = writer(fd)
             writer_object.writerow(mydata)
     subprocess.call('rm -rf example.py', shell=True)
 
 
 def run_example_v2():
-    f_path = '/media/nimashiri/SSD/FSE23_2/data/torch/torch_apis/x.csv'
+    f_path = '/media//SSD/FSE23_2/data/torch/torch_apis/x.csv'
     # all_files = os.listdir(f_path)
     data = pd.read_csv(f_path, sep=',', encoding='utf-8')
     for idx, row in data.iterrows():
@@ -69,7 +69,7 @@ def run_example_v2():
             print(e)
         if result.stderr:
             mydata = [row['Path'], result.stderr]
-            with open('/media/nimashiri/SSD/FSE23_2/data/torch/torch_apis/x2.csv', 'a', newline='\n') as fd:
+            with open('/media//SSD/FSE23_2/data/torch/torch_apis/x2.csv', 'a', newline='\n') as fd:
                 writer_object = writer(fd)
                 writer_object.writerow(mydata)
         # subprocess.call('rm -rf example.py', shell=True)
@@ -77,15 +77,15 @@ def run_example_v2():
 
 if __name__ == '__main__':
     # run_example_v2()
-    # subprocess.call('cp -r /media/nimashiri/DATA/vsprojects/FSE23_2/data/torch/torch_apis/write_tools.py /home/nimashiri/.local/lib/python3.8/site-packages/torch/', shell=True)
+    # subprocess.call('cp -r /media//DATA/vsprojects/FSE23_2/data/torch/torch_apis/write_tools.py /home//.local/lib/python3.8/site-packages/torch/', shell=True)
 
     data = pd.read_csv(
-        '/media/nimashiri/SSD/FSE23_2/data/torch/torch_apis/torch_APIs_signatures.csv')
+        '/media//SSD/FSE23_2/data/torch/torch_apis/torch_APIs_signatures.csv')
     for id_, row in data.iterrows():
         logging.info(f'{id_}/{len(data)} examples has been executed!')
         examples = [row['Example1'], row['Example2']]
         for id_2, ex in enumerate(examples):
             if isinstance(ex, str):
                 example = preprocess_examples(ex)
-                # write_to_disc(example, f'/media/nimashiri/SSD/FSE23_2/data/torch/torch_api_examples/{id_}{id_2}.py')
+                # write_to_disc(example, f'/media//SSD/FSE23_2/data/torch/torch_api_examples/{id_}{id_2}.py')
                 run_example(row['API'], example)

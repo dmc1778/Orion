@@ -6,7 +6,7 @@
 # import inspect
 # from tensorflow.instrumentation.decorators import dump_signature_of_class, dump_signature_of_function
 
-# def hijack(output_dir="/media/nimashiri/DATA/vsprojects/FSE23_2/data/tf"):
+# def hijack(output_dir="/media//DATA/vsprojects/FSE23_2/data/tf"):
 #     hijack_all(output_dir)
 
 
@@ -53,11 +53,11 @@
 #       return False
 #     if is_class(orig_func):
 #         if hasattr(orig_func, '__slots__'):
-#             # with open('/media/nimashiri/DATA/vsprojects/FSE23_2/slot_apis.csv', 'a', newline='\n') as fd:
+#             # with open('/media//DATA/vsprojects/FSE23_2/slot_apis.csv', 'a', newline='\n') as fd:
 #             #     writer_object = writer(fd)
 #             #     writer_object.writerow([orig_func])
 #             return False
-#         # with open('/media/nimashiri/DATA/vsprojects/FSE23_2/allowed_apis.csv', 'a', newline='\n') as fd:
+#         # with open('/media//DATA/vsprojects/FSE23_2/allowed_apis.csv', 'a', newline='\n') as fd:
 #         #     writer_object = writer(fd)
 #         #     writer_object.writerow([orig_func])
 #         wrapped_func = dump_signature_of_class(orig_func, func_name_str, output_dir=output_dir)
@@ -2046,7 +2046,7 @@ def hijack_all(output_dir, verbose=False):
     import sys
     module_members = inspect.getmembers(sys.modules[__name__], inspect.ismodule)
 
-    f = open ('/home/nimashiri/.local/lib/python3.8/site-packages/tensorflow/instrumentation/tf_apis.json', "r")
+    f = open ('/home//.local/lib/python3.8/site-packages/tensorflow/instrumentation/tf_apis.json', "r")
     data = json.loads(f.read())
     for key, value in data.items():
         for v in value:

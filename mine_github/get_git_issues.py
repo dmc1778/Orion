@@ -9,7 +9,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 from csv import writer
 
-# (0, nimashiri2012@gmail.com, 1, cse19922021@gmail.com, 2, nshiri@yorku.ca, 3, nshiri@cse.yorku.ca)
+# (0, 2012@gmail.com, 1, cse19922021@gmail.com, 2, nshiri@yorku.ca, 3, nshiri@cse.yorku.ca)
 tokens = {0: '', 1: '',
           2: '', 3: ''}
 

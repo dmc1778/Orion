@@ -46,6 +46,7 @@ class TorchArgument(Argument):
         
         self.history = False
         self.llm = False
+        self.mismatch_memory = False
         
         self.tensor_zero_flag_type1 = False
         self.tensor_zero_flag_type2 = False
@@ -679,21 +680,21 @@ class TorchArgument(Argument):
 
         return new_shape
 
-    def modify_rank(self) -> None:
-        if self.type == ArgType.TORCH_TENSOR:
-            if len(self.shape) == 4:
-                self.shape = self.alter_tensor_shape(self.shape)
-            elif len(self.shape) == 3:
-                self.shape = self.alter_tensor_shape(self.shape)
-            elif len(self.shape) == 2:
-                self.shape = self.alter_tensor_shape(self.shape)
-            elif len(self.shape) == 1:
-                self.shape = self.alter_tensor_shape(self.shape)
-            elif len(self.shape) == 0:
-                self.shape = self.alter_tensor_shape(
-                    self.shape, reduction=False)
+    def modify_rank(self, param_space, param_index, param_name) -> None:
+        if self.type == self.TORCH_TENSOR:
+            if param_index == 1:
+                param_name = f"parameter:{param_index-1}"
+            if param_space[param_name].MISMATCH_OP == 'EXPANSION':
+                op = True
+            elif param_space[param_name].MISMATCH_OP == 'REDUCTION':
+                op = False
             else:
-                self.shape = self.alter_tensor_shape(self.shape)
+                op = random.choice([True, False])
+            self.shape = self.alter_tensor_shape(self.shape, op)
+            if op:
+                self.MISMATCH_OP = "REDUCTION"
+            else:
+                self.MISMATCH_OP = "EXPANSION"
         else:
             return
 
@@ -887,7 +888,7 @@ class TorchArgument(Argument):
         val = -new_value
         return new_value
 
-    def new_mutation(self, RULE=None):
+    def new_mutation(self, param_space, param_index, param_name):
         if self.type == ArgType.INT:
             self.value = self.increase_integer(self.value)
         elif self.type == ArgType.FLOAT:
@@ -898,9 +899,10 @@ class TorchArgument(Argument):
             self.value = np.nan
         elif self.type == ArgType.TUPLE or self.type == ArgType.LIST:
             for self in self.value:
-                self.new_mutation()
+                self.new_mutation(param_space, param_index, param_name)
         elif self.type == ArgType.TORCH_TENSOR:
-            self.modify_rank()
+            self.mismatch_memory = self.shape
+            self.modify_rank(param_space, param_index, param_name)
         elif self.type == ArgType.TORCH_DTYPE:
             self.value = choice(self._dtypes)
         elif self.type == ArgType.TORCH_OBJECT:
@@ -1426,7 +1428,7 @@ class TorchAPI(API):
             arg = self.args[p]
             if do_type_mutation():
                 arg.mutate_type()
-            arg.new_mutation()
+            arg.new_mutation(self.args, param_index, p)
 
     def mutate(self, enable_value=True, enable_type=True, enable_db=True):
         num_arg = len(self.args)

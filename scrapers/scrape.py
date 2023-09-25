@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as soup
 from numpy import isin
 #from selenium import webdriver
-# driver = webdriver.Firefox(executable_path= r"/home/nimashiri/geckodriver-v0.32.0-linux64/geckodriver")
+# driver = webdriver.Firefox(executable_path= r"/home//geckodriver-v0.32.0-linux64/geckodriver")
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 import re
@@ -121,7 +121,7 @@ def recursive_parse_api_sequence(data):
             return recursive_parse_api_sequence(elem)
 
 def scrape_torch_v2():
-    data = pd.read_csv('/media/nimashiri/SSD/FSE23_2/data/torch/api_root_torch.csv')
+    data = pd.read_csv('/media//SSD/FSE23_2/data/torch/api_root_torch.csv')
 
     history_addr = 'scrapers/history_torch.txt'
 

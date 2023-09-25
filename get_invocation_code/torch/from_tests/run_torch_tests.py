@@ -79,8 +79,8 @@ class RunTestFiles():
 
 
 def run_tf_tests(data):
-    _path_clean_tests = '/media/nimashiri/SSD/FSE23_2/data/torch/torch_test_files/history.txt'
-    _path_corrupted_tests = '/media/nimashiri/SSD/FSE23_2/data/torch/torch_test_files/corrupted.txt'
+    _path_clean_tests = '/media//SSD/FSE23_2/data/torch/torch_test_files/history.txt'
+    _path_corrupted_tests = '/media//SSD/FSE23_2/data/torch/torch_test_files/corrupted.txt'
 
     mode = 'a' if os.path.exists(_path_clean_tests) else 'w'
     f1 = open(_path_clean_tests, mode=mode)
@@ -119,7 +119,7 @@ def run_tf_tests(data):
 
 if __name__ == '__main__':
 
-    tf_tests = '/media/nimashiri/SSD/FSE23_2/data/torch/torch_test_files/torch_tests.txt'
+    tf_tests = '/media//SSD/FSE23_2/data/torch/torch_test_files/torch_tests.txt'
     data = read_txt(tf_tests)
     run_tf_tests(data)
 

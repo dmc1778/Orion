@@ -6,8 +6,8 @@ def read_txt(addr):
     return lines
 
 def main():
-    log_dir = "/media/nimashiri/SSD/testing_results/DeepRel/tf/2.3.0/output-0/logs/test-confirmed-apis-2.txt"
-    pair_dir = "/media/nimashiri/SSD/testing_results/DeepRel/tf/2.3.0/output-0/"
+    log_dir = "/media//SSD/testing_results/DeepRel/tf/2.3.0/output-0/logs/test-confirmed-apis-2.txt"
+    pair_dir = "/media//SSD/testing_results/DeepRel/tf/2.3.0/output-0/"
 
     match_ = read_txt(log_dir)
     all_pair_dir = os.listdir(pair_dir)

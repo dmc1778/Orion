@@ -64,7 +64,7 @@ The distinction is based the first parameter of each the documents in each colle
 
 
 def get_unique_documents(dbname, new_db_name):
-    QUERIED_APIS_ADDRESS = f'/media/nimashiri/SSD/FSE23_2/misc/{dbname}_queried_apis.txt'
+    QUERIED_APIS_ADDRESS = f'/media//SSD/FSE23_2/misc/{dbname}_queried_apis.txt'
     new_db = pymongo.MongoClient(host="localhost", port=27017)[new_db_name]
     mydb = myclient[dbname]
 
@@ -120,7 +120,7 @@ Count the number of APIs based on the source they have been collected.
 
 
 def count_sources_per_api(dbname):
-    QUERIED_APIS_ADDRESS = f'/media/nimashiri/SSD/FSE23_2/misc/{dbname}_queried_apis.txt'
+    QUERIED_APIS_ADDRESS = f'/media//SSD/FSE23_2/misc/{dbname}_queried_apis.txt'
     mydb = myclient[dbname]
     counter = 0
 
@@ -143,7 +143,7 @@ def count_sources_per_api(dbname):
             for k, v in source_dict.items():
                 if v != 0:
                     mydata = [name, k]
-                    with open(f'/media/nimashiri/SSD/FSE23_2/statistics/{dbname}_api_coverage.csv', 'a', newline='\n') as fd:
+                    with open(f'/media//SSD/FSE23_2/statistics/{dbname}_api_coverage.csv', 'a', newline='\n') as fd:
                         writer_object = writer(fd)
                         writer_object.writerow(mydata)
 
@@ -186,9 +186,9 @@ def main():
             '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
 
         subprocess.call(
-            'rm -rf /media/nimashiri/DATA/mongodata/mongod.lock', shell=True)
-        subprocess.run(['mongod', '--dbpath', '/media/nimashiri/DATA/mongodata/',
-                       '--logpath', '/media/nimashiri/DATA/mongolog/mongo.log', '--fork'])
+            'rm -rf /media//DATA/mongodata/mongod.lock', shell=True)
+        subprocess.run(['mongod', '--dbpath', '/media//DATA/mongodata/',
+                       '--logpath', '/media//DATA/mongolog/mongo.log', '--fork'])
 
     count_sources_per_api('TF')
 
