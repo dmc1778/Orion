@@ -1,7 +1,17 @@
 ## Preface
-This is the source repository of the paper "History-Driven Fuzzing for Deep Learning Libraries" submitted to the FSE2024 conference. Please note that we have taken careful steps to protect the anonymity of the replication package
+This is the prototype implementation of our paper namely "History-Driven Fuzzing for Deep Learning Libraries" submitted to the FSE2024 conference. Please note that we have taken careful steps to protect the anonymity of the replication package.
 
-## Getting start
+## Required Dependencies
+The following are the dependencies required to run Orion:
+
+```
+inspect
+pymongo
+colorama
+pandas
+```
+
+## Running Orion
 ### Step 1
 First, you will need to download and extract the source in your desired directory.
 
