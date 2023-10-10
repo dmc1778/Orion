@@ -11,9 +11,19 @@ colorama
 pandas
 ```
 
+You can simply install all the required dependencies using the ```pip``` package manager.
+
 ## Running Orion
-### Step 1
-First, you will need to download and extract the source in your desired directory.
+### Step 1 
+In order to run Orion, first you need to install the target DL library. For example, if you want to test Orion on PyTorch-1.13.1, you need to run the following command:
+
+```
+pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
+```
+Please refer to the TensorFlow release history and PyTorch release history for further information.
+
+### Step 2
+In the second step, you will need to download and extract the source in your desired directory.
 
 ### Step 2
 When you download the source code, you need to enter the following command in the terminal:
