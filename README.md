@@ -37,5 +37,11 @@ Then you have to enter the following command:
 python run_fuzzer.py --database="database name" --library="target library" --release="target release" --tool="orion" --experiment_round=1
 ```
 
+Example:
+
+```
+python run_fuzzer.py --database="orion-tf1" --library="tf" --release="2.11.0" --tool="orion" --experiment_round=1
+```
+
 ## Data
 The reported vulnerabilities are available for [TensorFlow](https://github.com/dmc1778/Orion/blob/master/ORION_Confirmed_TensorFlow_Vulnerabilities.csv) and [PyTorch](https://github.com/dmc1778/Orion/blob/master/ORION_Confirmed_Torch_Vulnerabilities.csv).
