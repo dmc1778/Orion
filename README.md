@@ -25,7 +25,7 @@ Please refer to the TensorFlow release history and PyTorch release history for f
 ### Step 2
 In the second step, you will need to download and extract the source in your desired directory.
 
-### Step 2
+### Step 3
 When you download the source code, you need to enter the following command in the terminal:
 ```
 cd /root/fuzzing/
